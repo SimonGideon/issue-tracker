@@ -7,6 +7,10 @@ Rails.application.routes.draw do
     end
   end
   resources :reports, only: [:index] do
+    collection do
+      get :export_excel
+      get :export_pdf
+    end
   end
   root "projects#index"
 
