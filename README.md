@@ -15,7 +15,6 @@ Ruby on Rails application for tracking project issues with visual reporting.
 - **Projects**: Create, edit, and delete projects
 - **Issues**: CRUD operations with status (New/In Progress/Closed) and priority (1-5)
 - **Charts**: Issues by status (pie chart) and by project (column chart)
-- **UI**: Three-column layout with click-to-select issues
 
 ## Tech Stack
 
