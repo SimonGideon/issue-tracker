@@ -8,6 +8,8 @@ gem 'caxlsx'
 gem 'caxlsx_rails'
 gem 'prawn'
 gem 'prawn-table'
+# Gemfile
+gem 'sassc-rails'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.0.8", ">= 7.0.8.7"
