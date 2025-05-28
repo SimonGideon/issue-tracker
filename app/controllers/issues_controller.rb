@@ -17,7 +17,7 @@ class IssuesController < ApplicationController
     @issue = @project.issues.build(issue_params)
     
     if @issue.save
-      redirect_with_success([@project, @issue], 'Issue was successfully created.')
+      redirect_with_success(project_path(@project, issue_id: @issue.id), 'Issue was successfully created.')
     else
       render :new, status: :unprocessable_entity
     end
@@ -28,7 +28,7 @@ class IssuesController < ApplicationController
 
   def update
     if @issue.update(issue_params)
-      redirect_with_success([@project, @issue], 'Issue was successfully updated.')
+      redirect_with_success(project_path(@project, issue_id: @issue.id), 'Issue was successfully updated.')
     else
       render :edit, status: :unprocessable_entity
     end
