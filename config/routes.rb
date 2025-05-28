@@ -6,6 +6,8 @@ Rails.application.routes.draw do
       end
     end
   end
+  resources :reports, only: [:index] do
+  end
   root "projects#index"
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
