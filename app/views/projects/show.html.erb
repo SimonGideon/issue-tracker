@@ -1,2 +1,105 @@
-<h1>Projects#show</h1>
-<p>Find me in app/views/projects/show.html.erb</p>
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+  <div>
+    <h2><%= @project.title %></h2>
+    <p style="color: #666; margin: 0;"><%= @project.description %></p>
+  </div>
+  <div>
+    <%= link_to "← Back to Projects", projects_path, class: "btn btn-secondary" %>
+    <%= link_to "New Issue", new_project_issue_path(@project), class: "btn btn-primary" %>
+  </div>
+</div>
+
+<% if @issues.any? %>
+  <div class="project-layout" style="display: grid; grid-template-columns: 1fr 2fr 1fr; gap: 20px;">
+    <div class="issues-list" style="background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+      <div class="issues-header" style="padding: 15px; border-bottom: 1px solid #eee; font-weight: bold;">
+        Issues (<%= @issues.count %>)
+      </div>
+      <% @issues.each do |issue| %>
+        <div class="issue-item <%= 'selected' if @selected_issue == issue %>" 
+             onclick="window.location.href='<%= project_path(@project, issue_id: issue.id) %>'"
+             style="padding: 15px; border-bottom: 1px solid #eee; cursor: pointer; transition: background-color 0.2s;">
+          <div class="issue-title" style="font-weight: 500; margin-bottom: 5px;"><%= issue.title %></div>
+          <div class="issue-meta" style="font-size: 0.9em; color: #666;">
+            <span class="status-badge status-<%= issue.status.downcase.gsub(' ', '-') %>">
+              <%= issue.status %>
+            </span>
+            Priority: <%= issue.priority_label %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="issue-details" style="background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); padding: 20px;">
+      <% if @selected_issue %>
+        <div class="detail-section" style="margin-bottom: 20px;">
+          <div class="detail-label" style="font-weight: bold; color: #666; margin-bottom: 5px;">Title</div>
+          <div class="detail-value" style="font-size: 1.2em;"><%= @selected_issue.title %></div>
+        </div>
+
+        <div class="detail-section" style="margin-bottom: 20px;">
+          <div class="detail-label" style="font-weight: bold; color: #666; margin-bottom: 5px;">Status</div>
+          <div class="detail-value">
+            <span class="status-badge status-<%= @selected_issue.status.downcase.gsub(' ', '-') %>">
+              <%= @selected_issue.status %>
+            </span>
+          </div>
+        </div>
+
+        <div class="detail-section" style="margin-bottom: 20px;">
+          <div class="detail-label" style="font-weight: bold; color: #666; margin-bottom: 5px;">Priority</div>
+          <div class="detail-value"><%= @selected_issue.priority_label %></div>
+        </div>
+
+        <div class="detail-section" style="margin-bottom: 20px;">
+          <div class="detail-label" style="font-weight: bold; color: #666; margin-bottom: 5px;">Created</div>
+          <div class="detail-value">
+            <%= @selected_issue.created_at.strftime("%B %d, %Y") %>
+          </div>
+        </div>
+
+        <div class="detail-section" style="margin-bottom: 20px;">
+          <div class="detail-label" style="font-weight: bold; color: #666; margin-bottom: 5px;">Last Updated</div>
+          <div class="detail-value">
+            <%= @selected_issue.updated_at.strftime("%B %d, %Y") %>
+          </div>
+        </div>
+      <% else %>
+        <div style="text-align: center; color: #666; margin-top: 50px;">
+          <h4>Select an issue to view details</h4>
+        </div>
+      <% end %>
+    </div>
+
+
+    <div class="issue-actions" style="background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); padding: 20px;">
+      <% if @selected_issue %>
+        <% if @selected_issue.status != 'Closed' %>
+          <%= button_to mark_done_project_issue_path(@project, @selected_issue), 
+                      method: :patch, 
+                      class: "btn btn-success",
+                      style: "width: 100%; text-align: center; margin-bottom: 15px; padding: 12px;",
+                      form: { data: { turbo_confirm: "Mark this issue as completed?" } } do %>
+            ✓ Mark as Done
+          <% end %>
+        <% else %>
+          <div class="btn btn-secondary" style="width: 100%; text-align: center; margin-bottom: 15px; padding: 12px;">
+            ✓ Completed
+          </div>
+        <% end %>
+
+        <%= link_to "Edit Issue", edit_project_issue_path(@project, @selected_issue), 
+                    class: "btn btn-primary", style: "width: 100%; text-align: center; margin-bottom: 10px;" %>
+      <% end %>
+    </div>
+  </div>
+<% else %>
+  <div style="text-align: center; padding: 50px; background: #f8f9fa; border-radius: 8px;">
+    <h3>No Issues Yet</h3>
+    <p style="color: #666; margin-bottom: 20px;">
+      This project doesn't have any issues yet.
+    </p>
+    <%= link_to "Create First Issue", new_project_issue_path(@project), 
+                class: "btn btn-primary btn-large" %>
+  </div>
+<% end %>

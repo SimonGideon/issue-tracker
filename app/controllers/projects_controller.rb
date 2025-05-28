@@ -7,6 +7,7 @@ class ProjectsController < ApplicationController
 
   def show
     @issues = @project.issues.recent
+    @selected_issue = @project.issues.find_by(id: params[:issue_id]) if params[:issue_id].present?
   end
 
   def new

@@ -1,6 +1,6 @@
 class IssuesController < ApplicationController
   before_action :set_project
-  before_action :set_issue, only: [:show, :edit, :update, :destroy]
+  before_action :set_issue, only: [:show, :edit, :update, :destroy, :mark_done]
 
   def index
     @issues = @project.issues.recent
@@ -37,6 +37,14 @@ class IssuesController < ApplicationController
   def destroy
     @issue.destroy
     redirect_with_success(project_issues_path(@project), 'Issue was successfully deleted.')
+  end
+
+  def mark_done
+    if @issue.update(status: 'Closed')
+      redirect_with_success(project_path(@project, issue_id: @issue.id), 'Issue was marked as done.')
+    else
+      redirect_with_error(project_path(@project, issue_id: @issue.id), 'Failed to mark issue as done.')
+    end
   end
 
   private

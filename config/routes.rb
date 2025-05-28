@@ -1,7 +1,12 @@
 Rails.application.routes.draw do
   resources :projects do
-    resources :issues
+    resources :issues do
+      member do
+        patch :mark_done
+      end
+    end
   end
+  root "projects#index"
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

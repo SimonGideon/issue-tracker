@@ -1,2 +1,28 @@
-<h1>Projects#new</h1>
-<p>Find me in app/views/projects/new.html.erb</p>
+<h2>New Project</h2>
+
+<%= form_with model: @project do |form| %>
+  <% if @project.errors.any? %>
+    <div class="alert alert-danger">
+      <ul style="margin: 0; padding-left: 20px;">
+        <% @project.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= form.label :title %>
+    <%= form.text_field :title, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :description %>
+    <%= form.text_area :description, rows: 4, class: "form-control" %>
+  </div>
+
+  <div style="margin-top: 20px;">
+    <%= form.submit "Create Project", class: "btn btn-primary" %>
+    <%= link_to "Cancel", projects_path, class: "btn btn-secondary" %>
+  </div>
+<% end %>
