@@ -1,0 +1,42 @@
+
+<h2>Edit Issue: <%= @issue.title %></h2>
+
+<%= form_with model: [@project, @issue] do |form| %>
+  <% if @issue.errors.any? %>
+    <div class="alert alert-danger">
+      <ul style="margin: 0; padding-left: 20px;">
+        <% @issue.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= form.label :title %>
+    <%= form.text_field :title, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :status %>
+    <%= form.select :status, Issue::STATUSES, {}, { class: "form-control" } %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :priority %>
+    <%= form.select :priority, 
+                    options_for_select([
+                      ['Very Low (1)', 1],
+                      ['Low (2)', 2],
+                      ['Medium (3)', 3],
+                      ['High (4)', 4],
+                      ['Critical (5)', 5]
+                    ], @issue.priority), 
+                    {}, { class: "form-control" } %>
+  </div>
+
+  <div style="margin-top: 20px;">
+    <%= form.submit "Update Issue", class: "btn btn-primary" %>
+    <%= link_to "Cancel", project_path(@project, issue_id: @issue.id), class: "btn btn-secondary" %>
+  </div>
+<% end %>
